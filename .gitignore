@@ -1,0 +1,78 @@
+# Compiled source #
+###################
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files #
+#############
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.suo
+*.user
+*.userprefs
+*.3T
+
+# Build directories #
+#####################
+dist/
+node_modules/
+
+# Package Files #
+#################
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Dependency directories #
+##########################
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory #
+################################
+.npm
+
+# Optional eslint cache #
+########################
+.eslintcache
+
+# Miscellaneous #
+#################
+.env
+.env.locala
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs #
+#################
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+.gradle/
+
