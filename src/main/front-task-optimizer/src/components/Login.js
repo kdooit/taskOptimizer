@@ -28,6 +28,8 @@ function Login() {
                 },
                 body: JSON.stringify(userdata),
             });
+
+                console.log(userdata)
             const data = await response.json();
 
             if (response.ok) {
@@ -44,7 +46,6 @@ function Login() {
         }
     };
 
-    // 모달 창을 닫는 함수입니다.
     const handleClose = () => setShowError(false);
 
     return (

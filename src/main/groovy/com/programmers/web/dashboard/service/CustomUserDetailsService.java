@@ -26,14 +26,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private final MemberRepository memberRepository;
 
-//    @Override
-//    @Transactional
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        return memberRepository.findByEmail(username)
-//                .map(this::createUserDetails)
-//                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-//    }
-
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -73,7 +65,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toList());
 
         return new User(
-                member.getEmail(), // 사용자 식별자로 이메일 사용
+                member.getEmail(),
                 member.getPassword(),
                 authList
         );
