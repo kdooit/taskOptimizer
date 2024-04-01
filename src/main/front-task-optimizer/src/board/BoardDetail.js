@@ -38,7 +38,6 @@ function BoardDetail() {
             <Button variant="danger" onClick={() => {
                 // 여기에 삭제 로직 구현
             }}>삭제</Button>
-            {/* 댓글 기능 구현 */}
         </Container>
     );
 }

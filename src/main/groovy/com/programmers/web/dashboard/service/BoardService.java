@@ -96,6 +96,7 @@ public class BoardService {
         );
         // 조회수 증가
         findBoard.upViewCount();
+        boardRepository.save(findBoard);
         return ResBoardDetailsDto.fromEntity(findBoard);
     }
 
@@ -105,6 +106,7 @@ public class BoardService {
                 () -> new ResourceNotFoundException("Board", "Board Id", String.valueOf(boardId))
         );
         updateBoard.update(boardDTO.getTitle(), boardDTO.getContent());
+        boardRepository.save(updateBoard);
         return ResBoardDetailsDto.fromEntity(updateBoard);
     }
 

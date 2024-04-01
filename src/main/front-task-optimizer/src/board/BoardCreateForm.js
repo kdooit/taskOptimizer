@@ -13,7 +13,7 @@ function BoardCreateForm() {
         try {
             await authService.post('board', { title, content });
             alert('게시글이 성공적으로 작성되었습니다.');
-            navigate('/board'); // 게시글 목록 페이지로 리디렉션
+            navigate('/board');
         } catch (error) {
             console.error('게시글 작성 중 오류가 발생했습니다.', error);
             alert('게시글 작성에 실패하였습니다.');

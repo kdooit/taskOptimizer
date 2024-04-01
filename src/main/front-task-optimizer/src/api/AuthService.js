@@ -84,7 +84,16 @@ class AuthService {
             params: params,
         });
     }
+
+    async put(url, data = {}) {
+        const token = this.getToken();
+        if (!token) return Promise.reject("No token found.");
+        return axios.put(`${API_URL}${url}`, data, {
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+    }
 }
+
 
 // Axios 인터셉터 설정
 axios.interceptors.response.use(response => response, error => {

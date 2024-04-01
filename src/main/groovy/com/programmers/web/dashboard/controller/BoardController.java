@@ -36,18 +36,6 @@ public class BoardController {
         return ResponseEntity.ok(board);
     }
 
-    // 게시글 생성
-//    @PostMapping
-//    public ResponseEntity<ResBoardWriteDto> createBoard(@RequestBody BoardWriteDto boardWriteDto, @AuthenticationPrincipal UserDetails userDetails) {
-//        if (userDetails == null) {
-//            throw new CustomException("사용자 인증 정보를 찾을 수 없습니다.");
-//        } else {
-//            String email = userDetails.getUsername();
-//            ResBoardWriteDto resBoardWriteDto = boardService.createBoard(BoardWriteDto.ofEntity(boardWriteDto), email);
-//            return ResponseEntity.ok(resBoardWriteDto);
-//        }
-//    }
-
     @PostMapping
     public ResponseEntity<ResBoardWriteDto> createBoard(@RequestBody BoardWriteDto boardWriteDto, @AuthenticationPrincipal(expression = "username") String email) {
         ResBoardWriteDto resBoardWriteDto = boardService.createBoard(BoardWriteDto.ofEntity(boardWriteDto), email);
@@ -56,7 +44,7 @@ public class BoardController {
 
     // 게시글 수정
     @PutMapping("/{id}")
-    public ResponseEntity<ResBoardDetailsDto> updateBoard(@PathVariable Long id, @RequestBody BoardUpdateDto boardUpdateDto) {
+    public ResponseEntity<ResBoardDetailsDto> updateBoard(@PathVariable("id")Long id, @RequestBody BoardUpdateDto boardUpdateDto) {
         ResBoardDetailsDto updatedBoard = boardService.updateBoard(id, boardUpdateDto);
         return ResponseEntity.ok(updatedBoard);
     }

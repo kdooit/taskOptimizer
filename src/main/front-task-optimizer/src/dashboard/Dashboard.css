@@ -1,0 +1,35 @@
+.dashboard {
+    padding-top: 10%;
+    padding-bottom: 10%;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+/* 컨텐츠 크기 비율 조정 */
+.content-small {
+    height: 222px; /* 2단위 */
+}
+
+.content-large {
+    height: 111px; /* 1단위 */
+}
+
+.content-xlarge {
+    height: 333px; /* 3단위 */
+}
+
+.content-huge {
+    height: 666px; /* 6단위 (예시로 큰 사이즈 추가) */
+}
+
+/* 반응형 웹 디자인 */
+@media (max-width: 768px) {
+    .dashboard {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .content-small, .content-large, .content-xlarge, .content-huge {
+        height: auto;
+    }
+}

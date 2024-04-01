@@ -29,7 +29,6 @@ function Login() {
                 body: JSON.stringify(userdata),
             });
 
-                console.log(userdata)
             const data = await response.json();
 
             if (response.ok) {
