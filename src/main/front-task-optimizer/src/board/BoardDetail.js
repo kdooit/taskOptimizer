@@ -23,6 +23,17 @@ function BoardDetail() {
         fetchBoardDetail();
     }, [id]);
 
+    const handleDelete = async ()=>{
+        if (window.confirm('정말로 삭제하시겠습니까?')) {
+            try {
+                await authService.delete(`board/${id}`);
+                navigate(`/board`)
+            } catch(error) {
+
+            }
+        }
+
+    }
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -35,9 +46,7 @@ function BoardDetail() {
             <p>작성시간: {board.createdDate}</p>
             <div>{board.content}</div>
             <Button variant="primary" onClick={() => navigate(`/board/edit/${id}`)}>수정</Button>
-            <Button variant="danger" onClick={() => {
-                // 여기에 삭제 로직 구현
-            }}>삭제</Button>
+            <Button variant="danger" onClick={handleDelete}>삭제</Button>
         </Container>
     );
 }

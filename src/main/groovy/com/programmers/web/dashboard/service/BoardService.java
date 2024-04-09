@@ -115,30 +115,9 @@ public class BoardService {
         boardRepository.deleteById(boardId);
     }
 
-//    public List<Board> findAllBoards() {
-//        return boardRepository.findAll();
-//    }
 //
-//    public Board findBoardById(Long id) {
-//        return boardRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Board", "id", String.valueOf(id)));
-//    }
-
-//    public Board createBoard(Board board, String email) {
-//        Member member = memberRepository.findByEmail(email)
-//                .orElseThrow(() -> new ResourceNotFoundException("Member", "email", email));
-//        board.setMember(member);
-//        return boardRepository.save(board);
-//    }
-
-//    public Board updateBoard(Long id, Board boardDetails) {
-//        Board board = findBoardById(id);
-//        board.update(boardDetails.getTitle(), boardDetails.getContent());
-//        return boardRepository.save(board);
-//    }
-//
-//    public void deleteBoard(Long id) {
-//        Board board = findBoardById(id);
+//    public void deleteBoard(Long boardId) {
+//        Board board = findBoardById(boardId);
 //        if (board != null) {
 //            boardRepository.delete(board);
 //        }

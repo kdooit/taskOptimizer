@@ -77,6 +77,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests -> {
                     authorizeHttpRequests
                             .requestMatchers("/api/auth/**").permitAll()
+                            .requestMatchers("/weather/**").permitAll()
                             .requestMatchers("/api/admin/**").hasRole("ADMIN")
                             .anyRequest().authenticated();    // 나머지 API 는 전부 인증 필요
                 });

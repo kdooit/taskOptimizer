@@ -76,6 +76,7 @@ class AuthService {
         });
     }
 
+    //상세 글 보기
     async get(url, params = {}) {
         const token = this.getToken();
         if (!token) return Promise.reject("No token found.");
@@ -85,10 +86,20 @@ class AuthService {
         });
     }
 
+    //게시글 수정
     async put(url, data = {}) {
         const token = this.getToken();
         if (!token) return Promise.reject("No token found.");
         return axios.put(`${API_URL}${url}`, data, {
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+    }
+
+    //게시글 삭제
+    async delete(url, config = {}) {
+        const token = this.getToken();
+        if (!token) return Promise.reject("No token found.");
+        return axios.delete(`${API_URL}${url}`, {
             headers: { 'Authorization': `Bearer ${token}` },
         });
     }
