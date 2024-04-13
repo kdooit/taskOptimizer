@@ -1,17 +1,14 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const cors = require('cors');
-require('dotenv').config();
-
-const AuthService = require('./api/AuthService');
-const db = require('./db');
+import express from 'express';
+import bodyParser from 'body-parser';
+import fetch from 'node-fetch';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import authService from "./api/AuthService.js";
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
-// AuthService 인스턴스 생성, DB 연결 인스턴스 전달
-const authService = new AuthService(db);
+dotenv.config();  // 환경 변수 불러오기
 
 // 모든 도메인에서의 요청을 허용
 app.use(cors());
@@ -19,6 +16,11 @@ app.use(cors());
 // JSON 요청 본문 파싱을 위한 미들웨어
 app.use(bodyParser.json());
 app.use(express.json());
+
+// app.get('/', (req, res) => {
+//     console.log("서버에 접근 성공!");
+//     res.send("Hello, world!");
+// });
 
 // 회원가입 라우트
 app.post('/api/auth/signup', async (req, res) => {
@@ -32,41 +34,70 @@ app.post('/api/auth/signup', async (req, res) => {
     }
 });
 
-// 날씨 정보를 제공하는 라우트
+function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+}
+
+function transform(lat, lon) {
+    const Re = 6371.00877; // 지구 반경(km)
+    const grid = 5.0; // 격자 간격(km)
+    const slat1 = 30.0; // 표준위도 1
+    const slat2 = 60.0; // 표준위도 2
+    const olon = 126.0; // 기준점 경도
+    const olat = 38.0; // 기준점 위도
+    const xo = 210 / grid; // 기준점 X좌표
+    const yo = 675 / grid; // 기준점 Y좌표
+
+    let sn = Math.tan(Math.PI * 0.25 + slat1 * 0.5 / 180 * Math.PI) / Math.tan(Math.PI * 0.25 + olat * 0.5 / 180 * Math.PI);
+    sn = Math.log(Math.cos(deg2rad(olat)) / Math.cos(deg2rad(slat1))) / Math.log(sn);
+
+    let sf = Math.tan(Math.PI * 0.25 + olat * 0.5 / 180 * Math.PI);
+    sf = Math.pow(sf, sn) * Math.cos(deg2rad(olat)) / sn;
+
+    let ro = Math.tan(Math.PI * 0.25 + olat * 0.5 / 180 * Math.PI);
+    ro = Re * sf / Math.pow(ro, sn);
+
+    let ra = Math.tan(Math.PI * 0.25 + lat * 0.5 / 180 * Math.PI);
+    ra = Re * sf / Math.pow(ra, sn);
+    let theta = lon - olon;
+    if (theta > 180) theta -= 360;
+    if (theta < -180) theta += 360;
+    theta *= sn;
+
+    let x = Math.floor(ra * Math.sin(deg2rad(theta)) + xo + 0.5);
+    let y = Math.floor(ro - ra * Math.cos(deg2rad(theta)) + yo + 0.5);
+
+    return { x, y };
+}
+
+//기상청 api 호출
 app.get('/weather', async (req, res) => {
-    // const { nx, ny, base_date, base_time } = req.query;
-    const reg = req.query.reg; // 예보 구역 코드
-    const tmfc1 = '2020052505'; // 발표 시간 시작
-    const tmfc2 = '2020052517'; // 발표 시간 종료
+    console.log("Headers:", req.headers); // 헤더 로깅
+    const { lat, lon, baseDate, baseTime } = req.query;
+    const { nx, ny } = transform(parseFloat(lat), parseFloat(lon));
 
-    const apiKey = process.env.WEATHER_API_KEY;
-    const baseUrl = `https://apihub.kma.go.kr/api/typ01`;
-    const url = `${baseUrl}/url/fct_afs_dl2.php?reg=&tmfc1=2020052505&tmfc2=2020052517&disp=0&help=1&authKey=${apiKey}`;
+    const serviceKey = process.env.WEATHER_API_KEY;
+    const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${encodeURIComponent(serviceKey)}&numOfRows=10&pageNo=1&dataType=JSON&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}`;
+    console.log(url)
+
+    const token = sessionStorage.getItem('token');
     try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`API 요청에 실패했습니다. 상태 코드: ${response.status}`);
-        const textData = await response.text(); // 텍스트 데이터로 응답 받음
-
-        // 텍스트 데이터를 줄 단위로 분리하여 필요한 정보 추출
-        const weatherData = textData.split('\n').reduce((acc, line) => {
-            // 정규 표현식을 사용하여 필요한 데이터 추출, 예제는 기온(TA)과 하늘 상태(SKY)를 대상으로 합니다.
-            // 정확한 필드 위치를 알아야 정규 표현식을 작성할 수 있습니다.
-            const regex = /11A00101\s+\S+\s+\S+\s+\S+\s+\d+\s+\d+\s+\d+\s+\S+\s+\S+\s+\S+\s+\d+\s+\S+\s+(-?\d+)\s+\S+\s+(\d+)\s+(\S+)\s+(\d+)/;
-            const match = regex.exec(line);
-            if (match) {
-                // 추출된 데이터를 배열에 추가
-                acc.push({ temperature: match[1], skyCondition: match[3] });
+        const response = await fetch(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
-            return acc;
-        }, []);
-
-        // res.json({ data: weatherData });
-        res.send(textData);
-        console.log(weatherData)
+        });
+        if (!response.ok) {
+            throw new Error(`API 요청에 실패했습니다. 상태 코드: ${response.status}`);
+        }
+        const data = await response.json();
+        res.json(data.response.body.items.item);
     } catch (error) {
-        console.error('날씨 정보 조회 중 오류 발생:', error);
+        console.error("날씨 정보 조회 중 오류 발생:", error);
         res.status(500).send('날씨 정보 조회 중 오류가 발생했습니다.');
     }
 });
 
-app.listen(port, () => console.log(`서버가 ${PORT}번 포트에서 실행중입니다.`));
+
+app.listen(port, () => console.log(`서버가 ${port}번 포트에서 실행중입니다.`));

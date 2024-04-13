@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom'; // Outlet을 import
-import Sidebar from './Sidebar';
+import { Outlet } from 'react-router-dom';
+import Sidebar from './Sidebar.js';
 
 const Layout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Form, Button, Row, Col, Alert } from 'react-bootstrap';
-import authService from '../api/AuthService';
+import authService from '../api/AuthService.js';
 
 function Mypage() {
     const [userInfo, setUserInfo] = useState({

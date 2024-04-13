@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Button, Form } from 'react-bootstrap';
-import authService from "../api/AuthService";
+import authService from "../api/AuthService.js";
 
 function BoardDetail() {
     const { id } = useParams();

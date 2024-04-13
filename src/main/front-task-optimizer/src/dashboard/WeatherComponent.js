@@ -1,46 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function WeatherComponent() {
-    const [weatherInfo, setWeatherData] = useState(null);
+    const [weatherInfo, setWeatherInfo] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
     useEffect(() => {
-        const fetchWeatherInfo = async () => {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords;
+            const token = sessionStorage.getItem('token');
             try {
-                // 예시 파라미터, 실제 요청 시 적절한 값으로 대체 필요
-                const params = new URLSearchParams({
-                    reg: "11B10101", // 서울 지역 코드
-                    tmfc1: "2020052505",
-                    tmfc2: "2020052517"
+                const response = await fetch(`http://localhost:8080/weather?lat=${latitude}&lon=${longitude}&baseDate=20220601&baseTime=0500`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // 토큰 포함
+                    }
                 });
-                const response = await fetch(`/weather?${params}`);
                 if (!response.ok) {
-                    throw new Error('날씨 정보를 가져오는 데 실패했습니다.');
+                    setError('날씨 정보를 가져올 수 없습니다.');
+                    setLoading(false);
+                    return;
                 }
-                const data = await response.text();
-
-                console.log(data)
-                setWeatherData(data); // 파싱된 데이터로 상태 업데이트
+                const data = await response.json();
+                if (data && Array.isArray(data)) {
+                    setWeatherInfo(data);
+                    console.log(data)
+                } else {
+                    console.error('정보 타입이 배열이 아닙니다.:', data);
+                    setWeatherInfo([]);
+                }
                 setLoading(false);
             } catch (error) {
-                console.error(error);
-                setError(error.toString());
+                console.error('날씨 정보를 가져올 수 없습니다.:', error);
+                setError('Failed to fetch weather data');
                 setLoading(false);
             }
-        };
-
-        fetchWeatherInfo();
+        }, (error) => {
+            console.error('위치 정보를 가져올 수 없습니다.:', error);
+            setError('Failed to get location');
+            setLoading(false);
+        });
     }, []);
 
-    if (loading) return <div>날씨 정보를 불러오는 중...</div>;
-    if (error) return <div>에러: {error}</div>;
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
-            <h1>초단기 날씨 정보</h1>
-            {/* 날씨 정보 표시 로직 추가 */}
-            <p>기온: {weatherInfo ? weatherInfo.response.body.items.item[0].obsrValue : '정보 없음'}</p>
+        <div className='Container'>
+            <ul>
+                {weatherInfo.map((item, index) => (
+                    <li key={index}>{`${item.category}: ${item.fcstValue}`}</li>
+                ))}
+            </ul>
         </div>
     );
 }

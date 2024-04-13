@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,12 +49,9 @@ public class SecurityConfig {
 
         // CSRF 설정 Disable
         http
-                .httpBasic(httpBasic -> {
-                    httpBasic.disable();
-                })
+                .httpBasic(AbstractHttpConfigurer::disable)
 
-                .csrf(csrf ->{csrf.disable();
-                })
+                .csrf(AbstractHttpConfigurer::disable)
 
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -77,7 +75,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests -> {
                     authorizeHttpRequests
                             .requestMatchers("/api/auth/**").permitAll()
-                            .requestMatchers("/weather/**").permitAll()
                             .requestMatchers("/api/admin/**").hasRole("ADMIN")
                             .anyRequest().authenticated();    // 나머지 API 는 전부 인증 필요
                 });

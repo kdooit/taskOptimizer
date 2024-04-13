@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import './Dashboard.css';
 import WeatherComponent from "./WeatherComponent.js";
+import NewsComponent from "./NewsComponent.js";
 
 function Dashboard() {
     return (
@@ -9,6 +10,7 @@ function Dashboard() {
             <Row className="g-4">
                 <Col md={6} lg={4} className="content-large"><WeatherComponent /></Col>
                 <Col md={6} lg={8} className="content-large">뉴스 컴포넌트</Col>
+                {/*<Col md={6} lg={8} className="content-large"><NewsComponent /></Col>*/}
 
                 <Col md={6} lg={4} className="content-small">옷차림 추천 컴포넌트</Col>
                 <Col md={6} lg={8} className="content-small">즐겨찾기 컴포넌트</Col>

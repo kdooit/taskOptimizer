@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import authService from "../api/AuthService";
+import authService from "../api/AuthService.js";
 
 const API_URL = 'http://localhost:8080/api';
 

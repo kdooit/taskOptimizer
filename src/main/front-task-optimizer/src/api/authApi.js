@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 백엔드 API 엔드포인트 URL 설정
-const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/auth`;
+const API_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auth`;
 
 // 로그인 함수
 export const login = async (email, password) => {

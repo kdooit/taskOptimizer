@@ -1,8 +1,14 @@
 import axios from 'axios';
+import Db from '../Db.js';
 
 const API_URL = 'http://localhost:8080/api/';
 
 class AuthService {
+
+    constructor() {
+        this.Db = Db;
+    }
+
     // 로그인 메소드
     login(email, password) {
         return axios.post(`${API_URL}auth/login`, { email, password })
@@ -17,6 +23,7 @@ class AuthService {
     async logout(navigate) {
         const token = sessionStorage.getItem('token');
         if (!token) {
+            sessionStorage.removeItem('token');
             if (navigate) navigate('/');
             return;
         }
@@ -105,14 +112,19 @@ class AuthService {
     }
 }
 
-
 // Axios 인터셉터 설정
 axios.interceptors.response.use(response => response, error => {
     if (error.response && error.response.status === 401) {
         const authService = new AuthService();
-        authService.logout();
+        authService.logout().then(() => {
+            window.location = '/';
+            }
+
+        )
     }
     return Promise.reject(error);
 });
 
-export default new AuthService();
+// AuthService 인스턴스 생성, DB 연결 인스턴스 전달
+const authServiceInstance = new AuthService(Db);
+export default authServiceInstance;

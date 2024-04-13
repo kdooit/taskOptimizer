@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 import Pagination from "react-js-pagination";
-import authService from "../api/AuthService";
+import authService from "../api/AuthService.js";
 
 function BoardList() {
     const [boardList, setBoardList] = useState([]);

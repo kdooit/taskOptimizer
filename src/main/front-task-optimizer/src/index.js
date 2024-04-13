@@ -1,16 +1,19 @@
 import React from 'react';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from './App.js';
+import reportWebVitals from './reportWebVitals.js';
 
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './redux/store';
+import { store } from './redux/store.js';
 import axios from 'axios';
 
-import AuthService from './api/AuthService';
+import AuthService from './api/AuthService.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './custom.scss';
+
+import dotenv from 'dotenv';
+dotenv.config();
 
 axios.interceptors.response.use(
     response => response,
@@ -33,13 +36,4 @@ root.render(
     </React.StrictMode>
 );
 
-// root.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

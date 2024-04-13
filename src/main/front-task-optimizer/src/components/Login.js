@@ -21,7 +21,7 @@ function Login() {
         const userdata = { email, password };
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ function Login() {
                     </Row>
                     {/*<Row className="mb-3">*/}
                     {/*    <Col sm={{ span: 10, offset: 1 }} style={{ marginTop: '-10px' }}>*/}
-                    {/*        <Button variant="primary" onClick={() => window.location.href=`${process.env.REACT_APP_BACKEND_URL}/oauth2/authorization/google`} className="w-100">*/}
+                    {/*        <Button variant="primary" onClick={() => window.location.href=`${process.env.REACT_APP_API_BASE_URL}/oauth2/authorization/google`} className="w-100">*/}
                     {/*            Google로 로그인*/}
                     {/*        </Button>*/}
                     {/*    </Col>*/}

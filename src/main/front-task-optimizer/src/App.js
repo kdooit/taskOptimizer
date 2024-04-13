@@ -1,19 +1,20 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute.js';
 
-import Layout from './components/Layout';
-import Login from './components/Login';
-import SignIn from './components/SignIn';
-import FindAccount from './components/FindAccount';
-import ErrorPage from './components/ErrorPage';
-import Mypage from "./components/Mypage";
-import Dashboard from "./dashboard/Dashboard";
-import BoardList from "./board/BoardList";
-import BoardCreateForm from "./board/BoardCreateForm";
-import BoardUpdateForm from "./board/BoardUpdateForm";
-import BoardDetail from "./board/BoardDetail";
-import Calendar from "./schedule/Calendar";
+import Layout from './components/Layout.js';
+import Login from './components/Login.js';
+import SignIn from './components/SignIn.js';
+import FindAccount from './components/FindAccount.js';
+import ErrorPage from './components/ErrorPage.js';
+import Mypage from "./components/Mypage.js";
+import Dashboard from "./dashboard/Dashboard.js";
+import WeatherComponent from "./dashboard/WeatherComponent.js";
+import BoardList from "./board/BoardList.js";
+import BoardCreateForm from "./board/BoardCreateForm.js";
+import BoardUpdateForm from "./board/BoardUpdateForm.js";
+import BoardDetail from "./board/BoardDetail.js";
+import Calendar from "./schedule/Calendar.js";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                     <Route path="home" element={<Dashboard />} />
+                    <Route path="home" element={<WeatherComponent />} />
                     <Route path="board" element={<BoardList />} />
                     <Route path="board/create" element={<BoardCreateForm />} />
                     <Route path="board/edit/:id" element={<BoardUpdateForm />} />

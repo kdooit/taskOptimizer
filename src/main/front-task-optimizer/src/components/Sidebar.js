@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../api/AuthService';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleSidebar } from '../redux/sidebarSlice'
+import { toggleSidebar } from '../redux/sidebarSlice.js'
 import { Container, Nav } from 'react-bootstrap';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi'
 import '../common/sidebar.css';
+import authService from "../api/AuthService.js";
 
 function Sidebar() {
     const navigate = useNavigate();
@@ -24,10 +24,15 @@ function Sidebar() {
         }
     }, []);
 
+    // const handleLogout = () => {
+    //     AuthService.logout();
+    //     navigate('/login', { replace: true });
+    // };
     const handleLogout = () => {
-        AuthService.logout();
-        navigate('/login', { replace: true });
-    };
+        authService.logout().then(() => {
+            navigate('/login', {replace: true});
+        });
+    }
 
     const toggleText = isSidebarOpen ? 'Close Sidebar' : 'Open Sidebar';
 

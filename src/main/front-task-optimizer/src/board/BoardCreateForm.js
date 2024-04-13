@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import authService from "../api/AuthService";
+import authService from "../api/AuthService.js";
 
 function BoardCreateForm() {
     const [title, setTitle] = useState('');
