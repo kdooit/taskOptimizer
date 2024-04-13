@@ -1,7 +1,7 @@
-import "core-js/stable";
-import "regenerator-runtime/runtime";
+import "core-js/stable/index.js";
+import "regenerator-runtime/runtime.js";
 
-module.exports = {
+export default {
     presets: [
         // @babel/preset-env 설정: 최신 JavaScript를 변환
         ["@babel/preset-env", {
@@ -9,6 +9,7 @@ module.exports = {
             useBuiltIns: "usage",          // 필요한 폴리필 자동 포함
             corejs: 3,                     // core-js 버전 3 사용
             modules: false,                // 모듈 시스템 변경을 하지 않음, 웹팩2+의 트리 쉐이킹을 위해
+            loose: true,
         }],
         // @babel/preset-react 설정: JSX 변환
         ["@babel/preset-react", {
@@ -17,13 +18,10 @@ module.exports = {
         }]
     ],
     plugins: [
-        // 클래스 프로퍼티를 사용하기 위한 플러그인
-        ["@babel/plugin-proposal-class-properties", {
-            "loose": true  // 더 느슨한 스펙으로 클래스 프로퍼티 변환
-        }],
-        // 옵셔널 체이닝과 같은 최신 문법 지원
+        ["@babel/plugin-proposal-class-properties", { loose: true }],
+        ["@babel/plugin-proposal-private-methods", { loose: true }],
+        ["@babel/plugin-proposal-private-property-in-object", { loose: true }],
         "@babel/plugin-proposal-optional-chaining",
-        // 런타임 중에 Babel의 헬퍼 함수를 재사용, 코드 중복 감소
         ["@babel/plugin-transform-runtime", {
             "corejs": false, // core-js를 사용하지 않음, preset-env에서 관리
             "helpers": true, // Babel 헬퍼를 외부 참조로 이동

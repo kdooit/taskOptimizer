@@ -4,11 +4,18 @@ import fetch from 'node-fetch';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authService from "./api/AuthService.js";
+import path from 'path';
+dotenv.config();  // 환경 변수 불러오기
+
+import { fileURLToPath } from 'url';
+import open from 'open';
 
 const app = express();
 const port = process.env.PORT || 3000;
+const __dirname = path.dirname(fileURLToPath(import.meta.url)); // ES 모듈에서 __dirname 정의
+const publicPath = path.join(__dirname, 'build'); // React 빌드 폴더 경로 지정
 
-dotenv.config();  // 환경 변수 불러오기
+app.use(express.static(publicPath));
 
 // 모든 도메인에서의 요청을 허용
 app.use(cors());
@@ -17,10 +24,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 
-// app.get('/', (req, res) => {
-//     console.log("서버에 접근 성공!");
-//     res.send("Hello, world!");
-// });
+// 정적 파일 제공 설정
+app.use(express.static('build'));
+
+// 모든 GET 요청을 index.html로 라우팅 (Single Page Application 지원)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+});
 
 // 회원가입 라우트
 app.post('/api/auth/signup', async (req, res) => {
@@ -99,5 +109,7 @@ app.get('/weather', async (req, res) => {
     }
 });
 
-
-app.listen(port, () => console.log(`서버가 ${port}번 포트에서 실행중입니다.`));
+app.listen(port, () => {
+    console.log(`서버가 http://localhost:${port}번 포트에서 실행 중입니다.`);
+    open(`http://localhost:${port}`); // 자동으로 브라우저에서 주소 열기
+});
