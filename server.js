@@ -1,11 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config();  // 환경 변수 불러오기
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
 import cors from 'cors';
-import dotenv from 'dotenv';
-import authService from "./api/AuthService.js";
+import authService from "./src/main/front-task-optimizer/src/api/AuthService.js";
 import path from 'path';
-dotenv.config();  // 환경 변수 불러오기
 
 import { fileURLToPath } from 'url';
 import open from 'open';
