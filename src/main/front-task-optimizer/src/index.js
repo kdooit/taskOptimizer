@@ -12,9 +12,6 @@ import AuthService from './api/AuthService.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './custom.scss';
 
-import dotenv from 'dotenv';
-dotenv.config();
-
 axios.interceptors.response.use(
     response => response,
     error => {
